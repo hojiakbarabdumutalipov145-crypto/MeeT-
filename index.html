@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#2b6cff">
+  <title>MeeT</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232b6cff'/%3E%3Ctext x='32' y='43' font-size='30' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ Kirish / ro'yxatdan o'tish ============ -->
+<div id="auth" class="auth hidden">
+  <form id="authForm" class="auth-card" autocomplete="on">
+    <div class="logo">MeeT</div>
+    <p class="tagline">Dunyoning istalgan nuqtasi bilan bemalol gaplashing</p>
+    <div class="tabs">
+      <button type="button" id="tabLogin" class="tab active">Kirish</button>
+      <button type="button" id="tabRegister" class="tab">Ro‘yxatdan o‘tish</button>
+    </div>
+    <label id="nameField" class="field hidden">
+      <span>Ismingiz</span>
+      <input id="authName" type="text" maxlength="40" autocomplete="name" placeholder="Masalan, Hojiakbar">
+    </label>
+    <label class="field">
+      <span>Foydalanuvchi nomi</span>
+      <input id="authUser" type="text" maxlength="24" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="lotin harflari, raqam, _" required>
+    </label>
+    <label class="field">
+      <span>Parol</span>
+      <input id="authPass" type="password" maxlength="100" autocomplete="current-password" placeholder="kamida 6 ta belgi" required>
+    </label>
+    <div id="authError" class="form-error"></div>
+    <button id="authSubmit" class="primary" type="submit">Kirish</button>
+  </form>
+</div>
+
+<!-- ============ Asosiy ilova ============ -->
+<div id="app" class="app hidden">
+  <aside id="sidebar" class="sidebar">
+    <header class="side-head">
+      <div class="me">
+        <div id="meAvatar" class="avatar"></div>
+        <div class="me-text">
+          <div id="meName" class="name"></div>
+          <div id="meUser" class="sub"></div>
+        </div>
+      </div>
+      <div class="side-actions">
+        <button id="btnGroup" class="icon-btn" title="Yangi guruh" aria-label="Yangi guruh">
+          <svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-3.9-5A4 4 0 0 0 16 11zM8 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm8 1c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4zM8 13.5c-.4 0-.9 0-1.4.1C4.400 14 1 15.100 1 17.500V19h5.500v-2c0-1.300.6-2.400 1.500-3.500z"/></svg>
+        </button>
+        <button id="btnLogout" class="icon-btn" title="Chiqish" aria-label="Chiqish">
+          <svg viewBox="0 0 24 24"><path d="M10 17l1.400-1.400L8.800 13H20v-2H8.800l2.600-2.600L10 7l-5 5 5 5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"/></svg>
+        </button>
+      </div>
+    </header>
+    <div class="search">
+      <input id="searchInput" type="search" placeholder="Foydalanuvchini qidirish (@nom)" autocomplete="off" autocapitalize="none" spellcheck="false">
+    </div>
+    <div id="chatList" class="list"></div>
+  </aside>
+
+  <main id="main" class="main">
+    <div id="empty" class="empty">
+      <div class="empty-card">
+        <div class="logo small">MeeT</div>
+        <p>Suhbatni boshlash uchun chapdan chatni tanlang yoki foydalanuvchini qidiring.</p>
+      </div>
+    </div>
+
+    <section id="chat" class="chat hidden">
+      <header class="chat-head">
+        <button id="btnBack" class="icon-btn back" aria-label="Orqaga">
+          <svg viewBox="0 0 24 24"><path d="M20 11H7.800l5.600-5.600L12 4l-8 8 8 8 1.400-1.400L7.800 13H20z"/></svg>
+        </button>
+        <div id="chatAvatar" class="avatar"></div>
+        <div class="chat-title">
+          <div id="chatName" class="name"></div>
+          <div id="chatStatus" class="sub"></div>
+        </div>
+        <div id="callButtons" class="side-actions">
+          <button id="btnVoiceCall" class="icon-btn" title="Ovozli qo‘ng‘iroq" aria-label="Ovozli qo‘ng‘iroq">
+            <svg viewBox="0 0 24 24"><path d="M6.600 10.800a15 15 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.25 11.400 11.400 0 0 0 3.600.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.300.2 2.500.57 3.600a1 1 0 0 1-.25 1z"/></svg>
+          </button>
+          <button id="btnVideoCall" class="icon-btn" title="Video qo‘ng‘iroq" aria-label="Video qo‘ng‘iroq">
+            <svg viewBox="0 0 24 24"><path d="M17 10.500V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.500l4 4v-11z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div id="messages" class="messages"></div>
+      <div id="uploads" class="uploads"></div>
+
+      <footer class="composer">
+        <div id="composeNormal" class="compose-row">
+          <button id="btnAttach" class="icon-btn" title="Fayl biriktirish" aria-label="Fayl biriktirish">
+            <svg viewBox="0 0 24 24"><path d="M16.500 6v11.500a4 4 0 0 1-8 0V5a2.500 2.500 0 0 1 5 0v10.500a1 1 0 0 1-2 0V6H10v9.500a2.500 2.500 0 0 0 5 0V5a4 4 0 0 0-8 0v12.500a5.500 5.500 0 0 0 11 0V6z"/></svg>
+          </button>
+          <textarea id="msgInput" rows="1" placeholder="Xabar yozing…" maxlength="4000"></textarea>
+          <button id="btnVideoNote" class="icon-btn" title="Dumaloq video xabar" aria-label="Dumaloq video xabar">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm-1.500 4.500v7l6-3.500z"/></svg>
+          </button>
+          <button id="btnMic" class="icon-btn" title="Ovozli xabar" aria-label="Ovozli xabar">
+            <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.900V21h2v-3.100A7 7 0 0 0 19 11z"/></svg>
+          </button>
+          <button id="btnSend" class="icon-btn send hidden" title="Yuborish" aria-label="Yuborish">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+          </button>
+        </div>
+        <div id="composeRec" class="compose-row hidden">
+          <button id="recCancel" class="icon-btn danger" title="Bekor qilish" aria-label="Bekor qilish">
+            <svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM19 4h-3.500l-1-1h-5l-1 1H5v2h14z"/></svg>
+          </button>
+          <span class="rec-dot"></span>
+          <span id="recTime" class="rec-time">0:00</span>
+          <span class="rec-hint">Yozilmoqda…</span>
+          <span class="grow"></span>
+          <button id="recSend" class="icon-btn send" title="Yuborish" aria-label="Yuborish">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </footer>
+      <input id="fileInput" type="file" multiple hidden>
+    </section>
+  </main>
+</div>
+
+<!-- ============ Dumaloq video xabar yozish ============ -->
+<div id="vnOverlay" class="overlay hidden">
+  <div class="vn-box">
+    <div class="vn-ring" id="vnRing">
+      <video id="vnPreview" playsinline muted autoplay></video>
+    </div>
+    <div id="vnTime" class="vn-time">0:00</div>
+    <div class="vn-actions">
+      <button id="vnCancel" class="round-btn gray" aria-label="Bekor qilish">✕</button>
+      <button id="vnRecord" class="round-btn red" aria-label="Yozishni boshlash"></button>
+      <button id="vnFlip" class="round-btn gray" aria-label="Kamerani almashtirish">⟲</button>
+    </div>
+    <div id="vnHint" class="vn-hint">Yozishni boshlash uchun qizil tugmani bosing</div>
+  </div>
+</div>
+
+<!-- ============ Qo'ng'iroq ============ -->
+<div id="callOverlay" class="call hidden">
+  <video id="remoteVideo" autoplay playsinline></video>
+  <div id="callAvatarBox" class="call-avatar-box">
+    <div id="callAvatar" class="avatar big"></div>
+  </div>
+  <video id="localVideo" class="local-video" autoplay playsinline muted></video>
+  <div class="call-info">
+    <div id="callName" class="call-name"></div>
+    <div id="callStatus" class="call-status"></div>
+  </div>
+  <div class="call-controls">
+    <button id="callMic" class="round-btn gray" aria-label="Mikrofon">🎤</button>
+    <button id="callCam" class="round-btn gray" aria-label="Kamera">📹</button>
+    <button id="callHang" class="round-btn red" aria-label="Qo‘ng‘iroqni tugatish">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff"><path d="M12 9c-1.600 0-3.100.25-4.500.7v3.100c0 .4-.2.7-.6.9-.9.4-1.700 1-2.400 1.700-.2.2-.4.3-.7.3s-.5-.1-.7-.3L.3 13.700A1 1 0 0 1 0 13c0-.3.1-.5.3-.7C3.300 9.400 7.400 8 12 8s8.700 1.400 11.700 4.300c.2.2.3.4.3.7s-.1.5-.3.7l-2.400 2.400c-.2.2-.4.3-.7.3s-.5-.1-.7-.3a9.700 9.700 0 0 0-2.400-1.700c-.4-.2-.6-.5-.6-.9V9.700C15.100 9.250 13.600 9 12 9z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="incoming" class="dialog-wrap hidden">
+  <div class="dialog incoming">
+    <div id="incAvatar" class="avatar big"></div>
+    <div id="incName" class="call-name dark"></div>
+    <div id="incKind" class="sub"></div>
+    <div class="inc-actions">
+      <button id="incDecline" class="round-btn red" aria-label="Rad etish">✕</button>
+      <button id="incAccept" class="round-btn green" aria-label="Qabul qilish">✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Yangi guruh ============ -->
+<div id="groupDialog" class="dialog-wrap hidden">
+  <div class="dialog">
+    <h3>Yangi guruh</h3>
+    <input id="groupTitle" type="text" maxlength="60" placeholder="Guruh nomi">
+    <input id="groupSearch" type="search" placeholder="A’zo qo‘shish: foydalanuvchini qidiring" autocomplete="off" autocapitalize="none" spellcheck="false">
+    <div id="groupChips" class="chips"></div>
+    <div id="groupResults" class="mini-list"></div>
+    <div id="groupError" class="form-error"></div>
+    <div class="dialog-actions">
+      <button id="groupCancel" class="ghost">Bekor qilish</button>
+      <button id="groupCreate" class="primary small">Yaratish</button>
+    </div>
+  </div>
+</div>
+
+<div id="lightbox" class="overlay lightbox hidden"><img id="lightboxImg" alt=""></div>
+<div id="toast" class="toast"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
