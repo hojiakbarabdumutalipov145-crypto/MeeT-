@@ -1162,3 +1162,5 @@ import { Backend } from './backend.js';
     showAuth();
   })();
 })();
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
